@@ -5,6 +5,41 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const WHOP_APP_ID = Deno.env.get("WHOP_APP_ID");
+const WHOP_ACCESS_CHECK_DISABLED = Deno.env.get("WHOP_ACCESS_CHECK_DISABLED") === "true";
+
+const jsonResponse = (data: Record<string, unknown>, status = 200) =>
+  new Response(JSON.stringify(data), {
+    status,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+
+const extractWhopToken = (req: Request): string | null => {
+  const header = req.headers.get("Authorization") || req.headers.get("authorization");
+  if (header?.startsWith("Bearer ")) {
+    return header.slice(7).trim();
+  }
+
+  const cookieHeader = req.headers.get("Cookie") || req.headers.get("cookie");
+  if (!cookieHeader) {
+    return null;
+  }
+
+  for (const entry of cookieHeader.split(";")) {
+    const [rawKey, ...rest] = entry.trim().split("=");
+    if (rawKey === "whop_user_token" && rest.length > 0) {
+      try {
+        return decodeURIComponent(rest.join("="));
+      } catch (error) {
+        console.error("Failed to decode whop_user_token cookie", error);
+        return null;
+      }
+    }
+  }
+
+  return null;
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -13,6 +48,48 @@ serve(async (req) => {
   try {
     const { pattern } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+
+    if (!WHOP_ACCESS_CHECK_DISABLED) {
+      if (!WHOP_APP_ID) {
+        console.error("WHOP_APP_ID is not configured");
+        return jsonResponse({ error: "Configuration error" }, 500);
+      }
+
+      const whopToken = extractWhopToken(req);
+
+      if (!whopToken) {
+        return jsonResponse({ error: "Whop sign-in required" }, 401);
+      }
+
+      const accessExpression = `app:${WHOP_APP_ID}`;
+      const accessResponse = await fetch(
+        `https://access.api.whop.com/check/${encodeURIComponent(accessExpression)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${whopToken}`,
+          },
+        }
+      );
+
+      if (accessResponse.status === 401) {
+        return jsonResponse({ error: "Whop session expired" }, 401);
+      }
+
+      if (!accessResponse.ok) {
+        const accessError = await accessResponse.text();
+        console.error(
+          "Whop access API error:",
+          accessResponse.status,
+          accessError
+        );
+        return jsonResponse({ error: "Failed to verify Whop access" }, 500);
+      }
+
+      const accessData = await accessResponse.json();
+      if (!accessData?.access) {
+        return jsonResponse({ error: "Active Whop membership not found" }, 403);
+      }
+    }
     
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
@@ -122,18 +199,16 @@ DO NOT include any text outside the JSON structure.`;
       };
     }
 
-    return new Response(JSON.stringify(result), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return jsonResponse(result);
   } catch (error) {
     console.error("Error in generate-constellation-story:", error);
-    return new Response(
-      JSON.stringify({ 
+    return jsonResponse(
+      {
         error: error instanceof Error ? error.message : "Unknown error",
         name: "The Mysterious Pattern",
-        story: "These stars have created an interesting shape - what do you see?"
-      }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        story: "These stars have created an interesting shape - what do you see?",
+      },
+      500
     );
   }
 });

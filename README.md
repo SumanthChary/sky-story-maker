@@ -71,3 +71,12 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## Deploying to Whop
+
+- Build the production bundle with `npm run build`; the optimized site is written to the `dist/` folder.
+- Archive the bundle for upload by running `zip -r whop-app.zip dist` from the project root; this repository already contains the latest archive.
+- In the Whop Developer Console, open your app, choose **Upload new version**, and provide the generated `whop-app.zip` file.
+- Store server-side credentials such as `WHOP_API_KEY` only in Whop or Supabase function environment settings; expose client values with a `VITE_` prefix (for example `VITE_WHOP_APP_ID`).
+- After uploading, test the staging preview Whop provides before publishing your update.
+- Configure Supabase Edge Functions with `WHOP_APP_ID` (matching `VITE_WHOP_APP_ID`) so the backend can verify access before generating stories; optionally set `WHOP_ACCESS_CHECK_DISABLED=true` locally if you need to bypass the gate during development.

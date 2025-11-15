@@ -188,15 +188,26 @@ const ConstellationCanvas = () => {
         setStory(generatedStory);
       } catch (error) {
         console.error("Error generating constellation story:", error);
-        toast({
-          title: t("errorGenerating"),
-          description: t("errorGeneratingDescription"),
-          variant: "destructive",
-        });
-        setStory({
-          name: t("mysteriousPattern"),
-          story: t("mysteriousStory"),
-        });
+        const status = (error as { status?: number } | undefined)?.status;
+
+        if (status === 401 || status === 403) {
+          toast({
+            title: t("whopAccessRequired"),
+            description: t("whopAccessRequiredDescription"),
+            variant: "destructive",
+          });
+          setStory(null);
+        } else {
+          toast({
+            title: t("errorGenerating"),
+            description: t("errorGeneratingDescription"),
+            variant: "destructive",
+          });
+          setStory({
+            name: t("mysteriousPattern"),
+            story: t("mysteriousStory"),
+          });
+        }
       } finally {
         setIsGenerating(false);
       }
