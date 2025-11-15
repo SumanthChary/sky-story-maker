@@ -100,12 +100,16 @@ DO NOT include any text outside the JSON structure.`;
     const data = await response.json();
     console.log("Lovable AI response:", data);
 
-    const content = data.choices[0].message.content;
+    let content = data.choices[0].message.content;
+    
+    // Strip markdown code blocks if present (AI sometimes wraps JSON in ```json ... ```)
+    content = content.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
     
     // Parse JSON from response
     let result;
     try {
       result = JSON.parse(content);
+      console.log("Successfully parsed AI response:", result);
     } catch (e) {
       console.error("Failed to parse JSON response:", content);
       // Fallback: try to extract name and story from text

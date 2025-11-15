@@ -237,7 +237,7 @@ const ConstellationCanvas = () => {
   return (
     <div
       ref={containerRef}
-      className="relative w-screen h-screen overflow-hidden"
+      className="relative w-full h-screen overflow-hidden touch-none"
       style={{
         background: "radial-gradient(ellipse at center, #1a0b2e 0%, #000000 100%)",
       }}
@@ -337,11 +337,11 @@ const ConstellationCanvas = () => {
       ))}
 
       {/* UI Controls */}
-      <div className="absolute top-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-10 px-4">
+      <div className="absolute top-4 sm:top-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 sm:gap-4 z-10 px-4 w-full max-w-2xl">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-4xl md:text-6xl font-bold text-foreground text-center capitalize"
+          className="text-2xl sm:text-4xl md:text-6xl font-bold text-foreground text-center capitalize"
         >
           {t("title")}
         </motion.h1>
@@ -351,7 +351,7 @@ const ConstellationCanvas = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-muted-foreground text-center max-w-md capitalize-first"
+            className="text-sm sm:text-base text-muted-foreground text-center max-w-md capitalize-first px-4"
           >
             {t("instructions")}
           </motion.p>
@@ -359,14 +359,14 @@ const ConstellationCanvas = () => {
       </div>
 
       {/* Action buttons */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-wrap gap-4 justify-center z-10 px-4">
+      <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 flex flex-wrap gap-2 sm:gap-4 justify-center z-10 px-4 w-full max-w-2xl">
         {stars.length >= 3 && !story && (
           <Button
             onClick={handleRevealConstellation}
             disabled={isGenerating}
-            className="glass-button min-h-[44px] min-w-[44px] px-6 py-3 text-foreground font-semibold capitalize-first"
+            className="glass-button min-h-[44px] min-w-[120px] px-4 sm:px-6 py-3 text-sm sm:text-base text-foreground font-semibold capitalize-first"
           >
-            <Sparkles className="mr-2 h-5 w-5" />
+            <Sparkles className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
             {isGenerating ? t("revealingButton") : t("revealButton")}
           </Button>
         )}
@@ -375,9 +375,9 @@ const ConstellationCanvas = () => {
           <Button
             onClick={handleCreateNewSky}
             variant="outline"
-            className="glass-button min-h-[44px] min-w-[44px] px-6 py-3 text-foreground font-semibold capitalize-first"
+            className="glass-button min-h-[44px] min-w-[120px] px-4 sm:px-6 py-3 text-sm sm:text-base text-foreground font-semibold capitalize-first"
           >
-            <RotateCcw className="mr-2 h-5 w-5" />
+            <RotateCcw className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
             {t("resetButton")}
           </Button>
         )}
@@ -385,9 +385,9 @@ const ConstellationCanvas = () => {
         {story && (
           <Button
             onClick={handleSaveConstellation}
-            className="glass-button min-h-[44px] min-w-[44px] px-6 py-3 text-foreground font-semibold capitalize-first"
+            className="glass-button min-h-[44px] min-w-[120px] px-4 sm:px-6 py-3 text-sm sm:text-base text-foreground font-semibold capitalize-first"
           >
-            <Download className="mr-2 h-5 w-5" />
+            <Download className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
             {t("saveButton")}
           </Button>
         )}
@@ -400,13 +400,13 @@ const ConstellationCanvas = () => {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-lg w-full mx-4 z-20"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-xs sm:max-w-md lg:max-w-lg w-full mx-4 z-20"
           >
-            <div className="glass-panel p-8 shadow-2xl">
-              <h2 className="text-3xl font-bold text-foreground mb-4 capitalize-first">
+            <div className="glass-panel p-4 sm:p-6 lg:p-8 shadow-2xl">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground mb-2 sm:mb-4 capitalize-first">
                 {story.name}
               </h2>
-              <p className="text-foreground/90 text-lg leading-relaxed">{story.story}</p>
+              <p className="text-sm sm:text-base lg:text-lg text-foreground/90 leading-relaxed">{story.story}</p>
             </div>
           </motion.div>
         )}
