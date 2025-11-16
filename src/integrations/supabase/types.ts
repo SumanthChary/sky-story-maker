@@ -14,7 +14,72 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          constellation_count: number | null
+          created_at: string
+          display_name: string | null
+          email: string | null
+          id: string
+          is_premium: boolean | null
+          premium_purchase_date: string | null
+          updated_at: string
+        }
+        Insert: {
+          constellation_count?: number | null
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id: string
+          is_premium?: boolean | null
+          premium_purchase_date?: string | null
+          updated_at?: string
+        }
+        Update: {
+          constellation_count?: number | null
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          is_premium?: boolean | null
+          premium_purchase_date?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      saved_constellations: {
+        Row: {
+          background_type: string | null
+          created_at: string
+          id: string
+          image_data: string | null
+          name: string
+          stars: Json
+          story: string
+          user_id: string
+        }
+        Insert: {
+          background_type?: string | null
+          created_at?: string
+          id?: string
+          image_data?: string | null
+          name: string
+          stars: Json
+          story: string
+          user_id: string
+        }
+        Update: {
+          background_type?: string | null
+          created_at?: string
+          id?: string
+          image_data?: string | null
+          name?: string
+          stars?: Json
+          story?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
