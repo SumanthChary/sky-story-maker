@@ -16,8 +16,6 @@ export const TRANSLATIONS = {
     notEnoughStars: "Not enough stars",
     errorGenerating: "Error generating story",
     errorGeneratingDescription: "Failed to generate constellation story. Please check your API key.",
-    whopAccessRequired: "Membership required",
-    whopAccessRequiredDescription: "Sign in through Whop or purchase access to generate stories.",
   },
   "es-ES": {
     title: "Historias en el cielo",
@@ -36,8 +34,6 @@ export const TRANSLATIONS = {
     notEnoughStars: "No hay suficientes estrellas",
     errorGenerating: "Error al generar historia",
     errorGeneratingDescription: "Error al generar la historia de la constelación. Por favor verifica tu clave API.",
-    whopAccessRequired: "Se requiere membresía",
-    whopAccessRequiredDescription: "Inicia sesión en Whop o compra acceso para generar historias.",
   },
   "fr-FR": {
     title: "Histoires dans le ciel",
@@ -56,8 +52,6 @@ export const TRANSLATIONS = {
     notEnoughStars: "Pas assez d'étoiles",
     errorGenerating: "Erreur de génération",
     errorGeneratingDescription: "Échec de la génération de l'histoire de la constellation. Veuillez vérifier votre clé API.",
-    whopAccessRequired: "Abonnement requis",
-    whopAccessRequiredDescription: "Connectez-vous via Whop ou achetez un accès pour générer des histoires.",
   },
 };
 
