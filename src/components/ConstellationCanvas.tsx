@@ -13,6 +13,10 @@ import {
 import { getBrowserLocale, createTranslator, type Locale } from "@/lib/translations";
 import html2canvas from "html2canvas";
 import { useToast } from "@/hooks/use-toast";
+import { DonationButton } from "@/components/DonationButton";
+import { DonationModal } from "@/components/DonationModal";
+import { AdContainer } from "@/components/AdContainer";
+import { useDonation } from "@/hooks/use-donation";
 
 interface AnimatedLine extends ConstellationLine {
   progress: number;
@@ -53,6 +57,21 @@ const ConstellationCanvas = () => {
   const [locale] = useState<Locale>(getBrowserLocale());
   const t = createTranslator(locale);
   const { toast } = useToast();
+  const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
+  const { processDonation, isProcessing, isDonationSuccess, resetDonation } = useDonation();
+
+  // Handle donation
+  const handleDonate = async (amount: number) => {
+    await processDonation(amount);
+  };
+
+  const handleCloseDonationModal = () => {
+    setIsDonationModalOpen(false);
+    resetDonation();
+  };
+
+  // Determine ad visibility (hide when generating or showing story)
+  const isAdVisible = !isGenerating && !story;
 
   // Generate background stars on mount
   useEffect(() => {
@@ -413,6 +432,21 @@ const ConstellationCanvas = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Donation Button */}
+      <DonationButton onClick={() => setIsDonationModalOpen(true)} />
+
+      {/* Donation Modal */}
+      <DonationModal
+        isOpen={isDonationModalOpen}
+        onClose={handleCloseDonationModal}
+        onDonate={handleDonate}
+        isProcessing={isProcessing}
+        isDonationSuccess={isDonationSuccess}
+      />
+
+      {/* Ad Container */}
+      <AdContainer isVisible={isAdVisible} />
     </div>
   );
 };
