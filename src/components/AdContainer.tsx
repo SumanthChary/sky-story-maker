@@ -12,33 +12,36 @@ declare global {
 }
 
 export const AdContainer = ({ isVisible }: AdContainerProps) => {
-  // Initialize AdSense when component mounts
+  const adRef = React.useRef<HTMLModElement>(null);
+  const [adLoaded, setAdLoaded] = React.useState(false);
+
   React.useEffect(() => {
-    if (isVisible && window.adsbygoogle) {
+    if (isVisible && !adLoaded && adRef.current) {
       try {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
+        setAdLoaded(true);
       } catch (e) {
-        console.error("AdSense error:", e);
+        console.log("AdSense initializing...");
       }
     }
-  }, [isVisible]);
+  }, [isVisible, adLoaded]);
 
   return (
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ duration: 0.5 }}
-          className="fixed bottom-4 left-4 z-40"
+          exit={{ opacity: 0, y: 10 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="fixed bottom-3 left-3 z-30"
         >
-          <div className="glass-panel p-4 w-[300px] h-[100px] sm:w-[320px] sm:h-[100px] overflow-hidden">
+          <div className="bg-background/40 backdrop-blur-sm rounded-lg p-2 w-[280px] h-[75px] sm:w-[300px] sm:h-[80px] overflow-hidden border border-white/10 shadow-lg">
             <ins
+              ref={adRef}
               className="adsbygoogle"
               style={{ display: "block", width: "100%", height: "100%" }}
               data-ad-client="ca-pub-9522684726063783"
-              data-ad-slot="YOUR_AD_UNIT_ID"
               data-ad-format="auto"
               data-full-width-responsive="true"
             ></ins>
