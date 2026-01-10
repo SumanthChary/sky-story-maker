@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://stories-in-the-sky.lovable.app/</loc>
+    <lastmod>2025-01-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://storage.googleapis.com/gpt-engineer-file-uploads/GbL1iWfz9dVC4dsT4WOHf1c879v1/social-images/social-1763221067130-Star2.jpg</image:loc>
+      <image:title>Stories in the Sky - Interactive Constellation Creator</image:title>
+      <image:caption>Create magical constellations and discover AI-generated mythological stories</image:caption>
+    </image:image>
+  </url>
+</urlset>

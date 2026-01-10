@@ -1,3 +1,13 @@
+# Stories in the Sky - robots.txt
+# https://stories-in-the-sky.lovable.app
+
+User-agent: *
+Allow: /
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# Specific bot permissions
 User-agent: Googlebot
 Allow: /
 
@@ -10,5 +20,14 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
+User-agent: LinkedInBot
 Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# Sitemap location
+Sitemap: https://stories-in-the-sky.lovable.app/sitemap.xml
